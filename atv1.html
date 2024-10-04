@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -12,10 +12,11 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 300px;
+            width: 400px;
             box-shadow: 2px 2px 12px #aaa;
         }
 
+        input[type="text"],
         input[type="number"] {
             width: 100%;
             margin: 5px 0;
@@ -35,73 +36,113 @@
         button:hover {
             background-color: #218838;
         }
+
+        h2 {
+            margin-top: 20px;
+        }
     </style>
 </head>
 
 <body>
     <h1>Programação para Dispositivos Móveis</h1>
 
-    <h2>Soma de Números</h2>
-    <label for="num1">Primeiro número:</label>
-    <input type="number" id="num1" step="0.01"><br>
-    <label for="num2">Segundo número:</label>
-    <input type="number" id="num2" step="0.01"><br>
-    <button onclick="somar()">Somar</button>
-    <p id="resultado"></p>
+    <!-- 7) Vetor e valores ímpares -->
+    <h2>Valores Ímpares</h2>
+    <button onclick="imprimirImpares()">Imprimir Valores Ímpares</button>
+    <p id="resultadoImpares"></p>
 
-    <h2>Média de Notas</h2>
-    <label for="nota1">1ª Nota:</label>
-    <input type="number" id="nota1" step="0.01"><br>
-    <label for="nota2">2ª Nota:</label>
-    <input type="number" id="nota2" step="0.01"><br>
-    <label for="nota3">3ª Nota:</label>
-    <input type="number" id="nota3" step="0.01"><br>
-    <label for="nota4">4ª Nota:</label>
-    <input type="number" id="nota4" step="0.01"><br>
-    <button onclick="calcularMedia()">Calcular Média</button>
-    <p id="resultadoMedia"></p>
+    <!-- 8) Nome ao contrário -->
+    <h2>Nome ao Contrário</h2>
+    <label for="nome">Digite seu nome:</label>
+    <input type="text" id="nome">
+    <button onclick="escreverNomeAoContrario()">Escrever Nome</button>
+    <p id="resultadoNome"></p>
 
-    <h2>Tabuada</h2>
-    <label for="numero">Número inteiro:</label>
-    <input type="number" id="numero"><br>
-    <button onclick="mostrarTabuada()">Mostrar Tabuada</button>
-    <p id="resultadoTabuada"></p>
+    <!-- 9) Funcionários -->
+    <h2>Funcionários</h2>
+    <button onclick="cadastrarFuncionarios()">Cadastrar Funcionários</button>
+    <p id="resultadoFuncionarios"></p>
+
+    <!-- 10) Operações Matemáticas -->
+    <h2>Operações Matemáticas</h2>
+    <label for="num1">Primeiro Número:</label>
+    <input type="number" id="num1">
+    <label for="num2">Segundo Número:</label>
+    <input type="number" id="num2">
+    <button onclick="realizarOperacoes()">Realizar Operações</button>
+    <p id="resultadoOperacoes"></p>
 
     <script>
-        function somar() {
+        // 7) Imprimir valores ímpares
+        function imprimirImpares() {
+            const vetor = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            const impares = vetor.filter(num => num % 2 !== 0);
+            document.getElementById("resultadoImpares").innerText = `Valores ímpares: ${impares.join(', ')}`;
+        }
+
+        // 8) Nome ao contrário
+        function escreverNomeAoContrario() {
+            const nome = document.getElementById("nome").value;
+            const nomeAoContrario = nome.split('').reverse().join('');
+            document.getElementById("resultadoNome").innerText = `Nome ao contrário: ${nomeAoContrario}`;
+        }
+
+        // 9) Cadastrar funcionários
+        const funcionarios = [];
+
+        function cadastrarFuncionarios() {
+            for (let i = 0; i < 5; i++) {
+                const nome = prompt("Digite o nome do funcionário:");
+                const idade = parseInt(prompt("Digite a idade do funcionário:"));
+                const sexo = prompt("Digite o sexo do funcionário (M/F):");
+                const salario = parseFloat(prompt("Digite o salário do funcionário:"));
+
+                funcionarios.push({ nome, idade, sexo, salario });
+            }
+            imprimirFuncionariosComSalarioMinimo();
+        }
+
+        function imprimirFuncionariosComSalarioMinimo() {
+            const salarioMinimo = 1212.00; // valor do salário mínimo para referência
+            const funcionariosComSalarioMaior = funcionarios.filter(func => func.salario > salarioMinimo);
+            const resultados = funcionariosComSalarioMaior.map(func => `${func.nome} - Salário: R$ ${func.salario.toFixed(2)}`);
+            document.getElementById("resultadoFuncionarios").innerText = resultados.length > 0 ?
+                `Funcionários com salário maior que um salário mínimo:\n${resultados.join('\n')}` :
+                "Nenhum funcionário com salário maior que um salário mínimo.";
+        }
+
+        // 10) Realizar operações matemáticas
+        function realizarOperacoes() {
             const num1 = parseFloat(document.getElementById("num1").value);
             const num2 = parseFloat(document.getElementById("num2").value);
-            const soma = num1 + num2;
-            document.getElementById("resultado").innerText = `A soma de ${num1} e ${num2} é: ${soma}`;
+
+            const soma = adicionar(num1, num2);
+            const subtracao = subtrair(num1, num2);
+            const multiplicacao = multiplicar(num1, num2);
+            const divisao = dividir(num1, num2);
+
+            document.getElementById("resultadoOperacoes").innerHTML = `
+                Soma: ${soma}<br>
+                Subtração: ${subtracao}<br>
+                Multiplicação: ${multiplicacao}<br>
+                Divisão: ${divisao !== null ? divisao : 'Divisão por zero não é permitida.'}
+            `;
         }
 
-        function calcularMedia() {
-            const nota1 = parseFloat(document.getElementById("nota1").value);
-            const nota2 = parseFloat(document.getElementById("nota2").value);
-            const nota3 = parseFloat(document.getElementById("nota3").value);
-            const nota4 = parseFloat(document.getElementById("nota4").value);
-
-            const media = (nota1 + nota2 + nota3 + nota4) / 4;
-
-            let status;
-            if (media >= 6) {
-                status = "Aprovado";
-            } else {
-                status = "Reprovado";
-            }
-
-            document.getElementById("resultadoMedia").innerText = `Média: ${media.toFixed(2)} - Status: ${status}`;
+        function adicionar(a, b) {
+            return a + b;
         }
 
-        function mostrarTabuada() {
-            const numero = parseInt(document.getElementById("numero").value);
-            let resultado = '';
+        function subtrair(a, b) {
+            return a - b;
+        }
 
-            for (let i = 0; i <= 10; i++) {
-                resultado += `${numero} x ${i} = ${numero * i}<br>`;
-            }
+        function multiplicar(a, b) {
+            return a * b;
+        }
 
-            document.getElementById("resultadoTabuada").innerHTML = resultado;
+        function dividir(a, b) {
+            return b !== 0 ? a / b : null; // Evita divisão por zero
         }
     </script>
 </body>
